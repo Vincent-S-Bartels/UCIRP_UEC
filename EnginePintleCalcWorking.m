@@ -253,8 +253,8 @@ thrust_sea = massflow_throat*velocity_exit+...
     (pressure_exit-pressure_sea)*area_exit;
 %% Performance Parameters
 c_star = pressure_chamber*area_throat/massflow_throat; % combustion chamber performance parameter
-c_star_verify = sqrt(R_chamber*temperature_chamber*(((gamma_chamber+1)/2)...
-    ^((gamma_throat+1))));
+c_star_verify = sqrt(R_chamber*temperature_chamber/gamma_chamber*(((gamma_chamber+1)/2)...
+    ^((gamma_throat+1)/(gamma_throat-1))));
 thrust_coefficient = thrust_design/(pressure_chamber*area_throat);
 thrust_coefficient_verify = sqrt(((2*gamma_exit^2)/(gamma_exit-1))*((2/(gamma_exit+1))^((gamma_exit+1)/(gamma_exit-1)))*(1-((pressure_exit/pressure_chamber)^((gamma_exit-1)/gamma_exit))))+((pressure_exit-pressure_exit)/pressure_chamber)*(area_exit/area_throat); % Assuming that design has perfect expansion at pressure altitude, otherwise change pressure to match
 ISP = thrust_design/(massflow_throat*gravity)
