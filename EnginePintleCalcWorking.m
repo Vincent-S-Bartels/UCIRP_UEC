@@ -293,8 +293,25 @@ areaCH4 = mdotCH4/(Cd*sqrt(2*delP*rhoCH4))
 vCH4 = Cd*sqrt(2 * delP/rhoCH4)
 dCH4 = sqrt(4/pi * areaCH4) % m
 
-
-K = (rhoO2 * vO2^2) / (rhoCH4*vCH4^2) * (d02/dCH4);
+%% Pintle specific addendum
+%list of variables from (Middle East)
+c_star;
+Dcp = 0; % central gap diameter
+Dip = 0; % inner body diameter
+Dp = 0;  % pintle support thickness 
+Dt = 0;  % pintle dip diamter
+K1 = 0;  % dimensionless parameter
+K2 = 0;  % dimensionless parameter
+K3 = 0;  % dimensionless parameter
+Laod = 0; % actual opening distance
+Lopen = 0; % pintle opening (y axis from pintle slant edge to post
+Ltod = 0; %tracing opening distance
+Rcp = 0; %center radius post
+tag = 0; %thickness of annual gap
+tt = 0; %tip thickness 
+thetaPintle = 45; %pintle angle in degress
+thetaShadow = 0; %shadow angle
+K = (rhoO2 * vO2^2) / (rhoCH4*vCH4^2) * (dO2/dCH4);
 
 % double commented is old code
 % % tankPressure = 700; %PSI, chosen tank pressure for general calcs
