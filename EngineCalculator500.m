@@ -3,7 +3,9 @@
     %Improved by Zackey Sahebzada
     %Revised by Brian Devine
 
-clear; clc; close all;
+clear; 
+%clc; 
+close all;
 %% Given Parameters (Change these)
 
 OFratio=input('Enter O/F wt. ratio (2.50:.05:3.50):');    %enter O/F wt ratio 2.50:.05:3.50
@@ -16,7 +18,7 @@ gravity = 9.80665;  % m/s^2
 %THERMO PARAMETERS BELOW ONLY VALID FOR 500PSIA CHAMBER AND 50=Pc/Pe
 pressure_chamber = 3.447e6; % Pascal
 
-T=readtable('CEA_Processed/CEAParameters500.xlsx')
+T=readtable('CEA_Proccessed/CEAParameters(500).xlsx')
 
 
 
