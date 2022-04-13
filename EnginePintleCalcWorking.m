@@ -1,5 +1,4 @@
-%% Project Bulldog Engine Calculator
-%Light Lion
+%% Engine Calculator
 %Created by Owen Trimble
 %Improved by Zackey Sahebzada
 %Revised by Brian Devine
