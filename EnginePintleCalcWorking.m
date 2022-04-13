@@ -292,6 +292,10 @@ dO2 = sqrt(4/pi * areaO2) % m
 areaCH4 = mdotCH4/(Cd*sqrt(2*delP*rhoCH4))
 vCH4 = Cd*sqrt(2 * delP/rhoCH4)
 dCH4 = sqrt(4/pi * areaCH4) % m
+%% Showerhead # of holes
+areaHole = (pi/4) * (2.5*10^-3)^2
+nHoleO2 = areaO2/(areaHole)
+nHoleCH4 = areaCH4/(areaHole)
 
 %% Pintle specific addendum
 %list of variables from (Middle East)
