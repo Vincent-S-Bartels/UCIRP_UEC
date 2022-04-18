@@ -1,5 +1,4 @@
-%% Project Bulldog Engine Calculator
-%Light Lion
+%% Engine Calculator
 %Created by Owen Trimble
 %Improved by Zackey Sahebzada
 %Revised by Brian Devine
@@ -285,17 +284,12 @@ QdotTotal = Qdot02 + QdotCH4;
 
 %% Inlets:
 
-areaO2 = mdot02/(Cd * sqrt(2*delP * rhoO2)) % m^2
-vO2 = Cd*sqrt(2*delP/rhoO2) % m/s
-dO2 = sqrt(4/pi * areaO2) % m
+areaO2 = mdot02/(Cd * sqrt(2*delP * rhoO2)); % m^2
+vO2 = Cd*sqrt(2*delP/rhoO2); % m/s
 
-areaCH4 = mdotCH4/(Cd*sqrt(2*delP*rhoCH4))
-vCH4 = Cd*sqrt(2 * delP/rhoCH4)
-dCH4 = sqrt(4/pi * areaCH4) % m
-%% Showerhead # of holes
-areaHole = (pi/4) * (2.5*10^-3)^2
-nHoleO2 = areaO2/(areaHole)
-nHoleCH4 = areaCH4/(areaHole)
+areaCH4 = mdotCH4/(Cd*sqrt(2*delP*rhoCH4));
+vCH4 = Cd*sqrt(2 * delP/rhoCH4);
+
 
 %% Pintle specific addendum
 %list of variables from (Middle East)
@@ -317,13 +311,5 @@ thetaPintle = 45; %pintle angle in degress
 thetaShadow = 0; %shadow angle
 K = (rhoO2 * vO2^2) / (rhoCH4*vCH4^2) * (dO2/dCH4);
 
-% double commented is old code
-% % tankPressure = 700; %PSI, chosen tank pressure for general calcs
-% % pressureLossCoef = 0.05; % Lose due to piping etc.
-% % preInjectorPressure = (tankPressure - pressureLossCoef*tankPressure);
-% % pressureDropCoef = 0.2;
-% % 
-% % delPreInje = (preInjectorPressure - preInjectorPressure *pressureDropCoef );
-% % delPreInjePA = delPreInje*6.89476 * 10^3;
 
 
