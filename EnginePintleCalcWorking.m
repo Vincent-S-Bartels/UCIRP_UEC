@@ -8,6 +8,7 @@ clear; clc; close all;
 
 OFratio=input('Enter O/F wt. ratio (2.50:.05:3.50):');    %enter O/F wt ratio 2.50:.05:3.50
 radius_throat =input('Enter throat RADIUS in inches:');    % inches --later converted to metric 
+radius_pintle =input('Enter pintle Radius in inches:'); 
 mach_throat = 1;    % mach
 pressure_sea = 101325;  % Pascal
 R = 8.3144598;  % Joules/(mol*Kelvin)
@@ -286,7 +287,7 @@ QdotTotal = Qdot02 + QdotCH4;
 
 areaO2 = mdot02/(Cd * sqrt(2*delP * rhoO2)) % m^2
 vO2 = Cd*sqrt(2*delP/rhoO2) % m/s
-dO2 = sqrt(4/pi * areaO2) % m
+rO2 = sqrt(((radius_pintle)^2)+(2/pi * areaO2)) % m
 
 areaCH4 = mdotCH4/(Cd*sqrt(2*delP*rhoCH4))
 vCH4 = Cd*sqrt(2 * delP/rhoCH4)
@@ -302,7 +303,7 @@ c_star;
 Dcp = 0; % central gap diameter
 Dip = 0; % inner body diameter
 Dp = 0;  % pintle support thickness 
-Dt = 0;  % pintle dip diamter
+Dt = 0;  % pintle tip diamter
 K1 = 0;  % dimensionless parameter
 K2 = 0;  % dimensionless parameter
 K3 = 0;  % dimensionless parameter
