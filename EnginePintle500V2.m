@@ -1,4 +1,4 @@
-%% Project Bulldog Engine Calculator
+%% Engine Calculator
     %Created by Owen Trimble
     %Improved by Zackey Sahebzada
     %Revised by Brian Devine
