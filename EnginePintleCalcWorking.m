@@ -276,20 +276,31 @@ delP = 70*6894.76 % psi to pascal,
 
 %% mass flow of prop/oxid
 mdotTotal = massflow_throat;
-mdot02 = mdotTotal / (1 + (1/OFratio));
-mdotCH4 = mdot02 / OFratio;
-Qdot02 = mdot02/rhoO2;
+mdotO2 = mdotTotal / (1 + (1/OFratio));
+mdotCH4 = mdotO2 / OFratio;
+Qdot02 = mdotO2/rhoO2;
 QdotCH4 = mdotCH4/rhoCH4;
 QdotTotal = Qdot02 + QdotCH4;
 
 %% Inlets:
 
-areaO2 = mdot02/(Cd * sqrt(2*delP * rhoO2)); % m^2
+areaO2 = mdotO2/(Cd * sqrt(2*delP * rhoO2)); % m^2
 vO2 = Cd*sqrt(2*delP/rhoO2); % m/s
 
 areaCH4 = mdotCH4/(Cd*sqrt(2*delP*rhoCH4));
 vCH4 = Cd*sqrt(2 * delP/rhoCH4);
 
+%% Chamber Length Approx. 
+% Based on Mechanics and Thermodynamics of Propulsion Chapter 12.5
+Ac_At = 3.5;
+Ac = Ac_At* area_throat;
+ud = (vO2*mdotO2 + vCH4*mdotCH4)/mdotTotal;
+Arand = Ac / (areaO2 + areaCH4);
+rhoChamber = pressure_chamber/(R_chamber * temperature_chamber);
+rhoRatio = rhoChamber / ((OFratio*rhoO2 + rhoCH4)/2);
+X0 = Arand * rhoRatio;
+fancD = 0.5 ; %Assumption of dimensionless droplet drag.
+ettaStar = (X0 + 3*fancD/10)/(2 + fancD);
 
 %% Pintle specific addendum
 %list of variables from (Middle East)
@@ -309,7 +320,7 @@ tag = 0; %thickness of annual gap
 tt = 0; %tip thickness 
 thetaPintle = 45; %pintle angle in degress
 thetaShadow = 0; %shadow angle
-K = (rhoO2 * vO2^2) / (rhoCH4*vCH4^2) * (dO2/dCH4);
+%K = (rhoO2 * vO2^2) / (rhoCH4*vCH4^2) * (dO2/dCH4);
 
 
 
