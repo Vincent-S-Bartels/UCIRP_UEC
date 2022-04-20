@@ -147,17 +147,36 @@ v_O2=mdotO2/(A_inletO2*rho_O2);
 
 D_pt=8e-3;        %Pintle Tip Diameter
 D_pr=.375*D_pt;   %Diameter of Pintle Rod
-theta_pt=45;      %Pintle Angle (Deg)
+theta_pt=input('Enter Pintle Angle (Degs): ');      %Pintle Angle (Deg)
 
 D_cg=2*sqrt((A_inletCH4/pi)+(D_pr/2)^2);
 t_post=(D_pt-D_cg)/2;      %Thickness of post between D_cg and D_post
 D_post=D_cg+2*t_post;
 D_outer=2*sqrt((A_inletO2/pi)+(D_post/2)^2);
 t_ann=(D_outer-D_post)/2;
+t_cg=(D_cg-D_pr)/2;
+
+R_pt=D_pt/2;
+R_pr=D_pr/2;
+R_cg=D_cg/2;
 R_post=D_post/2;
+R_outer=D_outer/2;
 
+% L_open=((v_O2*mdotCH4*rho_O2)/(v_CH4*mdotO2*rho_CH4))*((D_pt+t_ann)/D_pt)*t_ann;
+% l=cosd(theta_pt)*sqrt(R_pt^2-(A_inletCH4)/(pi*sqrt(tand(theta_pt)^2+1)))-R_pt*cosd(theta_pt);
+% L_open2=l/sind(theta_pt);
+a=sind(theta_pt)*cosd(theta_pt);
+b=-2*R_pt;
+c=A_inletCH4/(pi*cosd(theta_pt));
+L_open=(-b-sqrt(b^2-4*a*c))/(2*a);
+mtoinch=39.3701;
 
-L_open=((v_O2*mdotCH4*rho_O2)/(v_CH4*mdotO2*rho_CH4))*((D_pt+t_ann)/D_pt)*t_ann;
+fprintf('Pintle Tip Radius (in): %f\n',R_pt*mtoinch);
+fprintf('Pintle Rod Radius (in): %f\n',R_pr*mtoinch);
+fprintf('Pintle Center Gap Radius (in): %f\n',R_cg*mtoinch);
+fprintf('Pintle Post Radius (in): %f\n',R_post*mtoinch);
+fprintf('Pintle Outer Radius (in): %f\n',R_outer*mtoinch);
+fprintf('Opening Distance of the Pintle (in): %f\n',L_open*mtoinch);
 
 %% Injector Performance Calculations
 
