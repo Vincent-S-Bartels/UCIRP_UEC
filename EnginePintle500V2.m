@@ -137,6 +137,12 @@ mdot_throat = (((0.152^2/4*pi)*600*1)/...
 volumetric = mdot_throat/(0.0725*35.3147);
 chillin = volumetric>QdotTotal;
 
+if chillin==1
+  fprintf('We are Chillin\n\n');
+else
+  fprintf('We are NOT Chillin\n\n');
+end
+
 %% Injector Sizing
 
 A_inletO2=mdotO2/(Cd*sqrt(2*delPInject*rho_O2));
@@ -162,13 +168,8 @@ R_cg=D_cg/2;
 R_post=D_post/2;
 R_outer=D_outer/2;
 
-% L_open=((v_O2*mdotCH4*rho_O2)/(v_CH4*mdotO2*rho_CH4))*((D_pt+t_ann)/D_pt)*t_ann;
-% l=cosd(theta_pt)*sqrt(R_pt^2-(A_inletCH4)/(pi*sqrt(tand(theta_pt)^2+1)))-R_pt*cosd(theta_pt);
-% L_open2=l/sind(theta_pt);
-a=sind(theta_pt)*cosd(theta_pt);
-b=-2*R_pt;
-c=A_inletCH4/(pi*cosd(theta_pt));
-L_open=(-b-sqrt(b^2-4*a*c))/(2*a);
+%L_open=((v_O2*mdotCH4*rho_O2)/(v_CH4*mdotO2*rho_CH4))*((D_pt+t_ann)/D_pt)*t_ann;
+L_open=(R_post-sqrt(R_post^2-A_inletCH4*(sind(theta_pt)/pi)))/(sind(theta_pt)*cosd(theta_pt));
 mtoinch=39.3701;
 
 fprintf('Pintle Tip Radius (in): %f\n',R_pt*mtoinch);
@@ -176,7 +177,7 @@ fprintf('Pintle Rod Radius (in): %f\n',R_pr*mtoinch);
 fprintf('Pintle Center Gap Radius (in): %f\n',R_cg*mtoinch);
 fprintf('Pintle Post Radius (in): %f\n',R_post*mtoinch);
 fprintf('Pintle Outer Radius (in): %f\n',R_outer*mtoinch);
-fprintf('Opening Distance of the Pintle (in): %f\n',L_open*mtoinch);
+fprintf('Opening Distance of the Pintle (in): %f\n\n',L_open*mtoinch);
 
 %% Injector Performance Calculations
 
@@ -184,7 +185,6 @@ K=(v_O2*t_ann)/(v_CH4*L_open);
 TMR=(mdotCH4*v_CH4*cosd(theta_pt))/(mdotO2*v_O2+mdotCH4*v_CH4*sind(theta_pt));             %Total Momentum Ratio
 alph=atand(TMR);  %Spray Angle of Propellants
 We=(rho_O2*L_open*(v_O2-v_CH4)^2)/sig_CH4;                                                 %Weber Number
-Pr_c=[];
 
 %% Chamber Geometry
 
@@ -194,6 +194,4 @@ p=1.3+.9*xi;
 q=3.455-.225*xi;
 SMD=L_open*xi^-1*exp(4-(q*We^.1));
 Large_gamma=sqrt(((gamma_chamber+1)/gamma_chamber)^((gamma_chamber+1)/(gamma_chamber-1)));
-%B=(temperature_chamber-T_cr)/(T_cr_O2-T_CH4);
-%S=(9/2)*(Pr_c/B);
 u_droplet=(mdotCH4*v_CH4+mdotO2*v_O2)/mdotTotal;
