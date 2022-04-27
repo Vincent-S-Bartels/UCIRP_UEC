@@ -28,7 +28,7 @@ gravity = 9.80665;  % m/s^2
 %THERMO PARAMETERS BELOW ONLY VALID FOR 500PSIA CHAMBER AND 50=Pc/Pe
 pressure_chamber = 3.792e6; % Pascal 550 psi
 
-T=readtable('CEAParameters(550).xlsx');
+T=readtable('CEA_Proccessed/CEAParameters(550).xlsx');
 
 temperature_chamber = T{n,14};  % Kelvin
 pressure_exit = T{n,13}*10^5;   % Pascal
