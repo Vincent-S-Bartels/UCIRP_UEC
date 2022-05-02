@@ -151,7 +151,9 @@ A_inletCH4=mdotCH4/(Cd*sqrt(2*delPInject*rho_CH4));
 v_CH4=mdotCH4/(A_inletCH4*rho_CH4);
 v_O2=mdotO2/(A_inletO2*rho_O2);
 
-D_pt=8e-3;        %Pintle Tip Diameter
+D_pt = input('Enter Pintle Tip Diameter, the head (in): ');
+
+D_pt=D_pt*0.0254;        %Pintle Tip Diameter
 D_pr=.375*D_pt;   %Diameter of Pintle Rod
 theta_pt=input('Enter Pintle Angle (Degs): ');      %Pintle Angle (Deg)
 
