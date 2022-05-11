@@ -131,6 +131,7 @@ QdotTotal = Qdot02+QdotCH4;
 
 %% Can 1/4" tubing handle the N2 Volumetric Flow Rate?
 
+<<<<<<< Updated upstream
 mdot_throat = (((0.152^2/4*pi)*600*1)/...
     (sqrt(580*661.98)))*((sqrt(1.4*...
     (1+((1.4-1)/2)*1^2)^...
@@ -144,6 +145,19 @@ else
     fprintf('We are NOT Chillin\n\n');
 end
 
+% mdot_throat = (((0.152^2/4*pi)*600*1)/...
+% (sqrt(580*661.98)))*((sqrt(1.4*...
+% (1+((1.4-1)/2)*1^2)^...
+% (-(1.4+1)/(1.4-1)))));
+% volumetric = mdot_throat/(0.0725*35.3147);
+% chillin = volumetric>QdotTotal;
+% 
+% if chillin==1
+%   fprintf('We are Chillin\n\n');
+% else
+%   fprintf('We are NOT Chillin\n\n');
+% end
+% 
 %% Injector Sizing
 
 A_inletO2=mdotO2/(Cd*sqrt(2*delPInject*rho_O2));

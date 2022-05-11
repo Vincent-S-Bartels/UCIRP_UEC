@@ -136,7 +136,7 @@ for j = 1:1:(length(throatRadiusIterate))
     plot(OFratioIterate, thrustStoreDesign(:,j));
 end
 legend({'0.45', '0.46', '0.47', '0.48', '0.49', '0.50','0.51','0.52','0.53','0.54','0.55'}, ...
-    'Location','best', NumColumns=2)
+    'Location','best', 'NumColumns',2)
 hold off
 %% C* and ISP Plot
 subplot(2,2,2)
@@ -149,7 +149,7 @@ yyaxis right
 plot(OFratioIterate, ISPStoreSealevel(:, j));
 plot(OFratioIterate, ISPStoreDesign(:, j));
 ylabel('ISP (s)');
-legend({'C*', 'ISP Sea', 'ISP Design'}, Location="best")
+legend({'C*', 'ISP Sea', 'ISP Design'}, 'Location','best')
 hold off
 %% Mass Flow Rate Plot
 subplot(2,2,3)
@@ -161,7 +161,7 @@ end
 xlabel('OF Ratio')
 ylabel('kg/s')
 legend({'0.45', '0.46', '0.47', '0.48', '0.49', '0.50','0.51','0.52','0.53','0.54','0.55'}, ...
-    'Location','best', NumColumns=2)
+    'Location','best', 'NumColumns', 2)
 hold off
 
 subplot(2,2,4)
@@ -173,7 +173,7 @@ end
 xlabel('OF Ratio')
 ylabel('Radius in Inches')
 legend({'0.45', '0.46', '0.47', '0.48', '0.49', '0.50','0.51','0.52','0.53','0.54','0.55'}, ...
-    'Location','best', NumColumns=2)
+    'Location','best', 'NumColumns', 2)
 hold off
 
 for j = 1:1:2
