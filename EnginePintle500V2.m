@@ -1,7 +1,7 @@
 %% Project Bulldog Engine Calculator
-    %Created by Owen Trimble
-    %Improved by Zackey Sahebzada
-    %Revised by Brian Devine
+%Created by Owen Trimble
+%Improved by Zackey Sahebzada
+%Revised by Brian Devine
 
 clear; clc; close all;
 %Given Parameters (Change these)
@@ -11,11 +11,11 @@ OFr=2.5:.05:3.5;
 n=1;
 
 while OFr(n)~=OFratio
-  n=n+1;
-  if n>numel(OFr)
-    OFratio=input("Please Input Valid OF Ratio (2.50:.05:3.50): ");
-    n=1;
-  end
+    n=n+1;
+    if n>numel(OFr)
+        OFratio=input("Please Input Valid OF Ratio (2.50:.05:3.50): ");
+        n=1;
+    end
 end
 
 radius_throat =input('Enter throat RADIUS in inches:');    % inches --later converted to metric
@@ -63,7 +63,8 @@ mach_exit = sqrt((2/(gamma_exit-1))*((pressure_chamber/pressure_exit)^...
     ((gamma_exit-1)/gamma_exit)-1));
 %Solving for Mach Exit using StagnationPressure/Pressure Exit formula
 
-temperature_exit = temperature_chamber/(1+((gamma_exit-1)/2)*mach_exit^2);
+%temperature_exit = temperature_chamber/(1+((gamma_exit-1)/2)*mach_exit^2);
+temperature_exit = T{n, 16};
 
 epsilon = (1/mach_exit)*((2/(gamma_exit+1))*(1+(((gamma_exit-1)*mach_exit^2)/2)))^...
     ((gamma_exit+1)/(2*(gamma_exit-1)));
@@ -77,9 +78,9 @@ velocity_exit = mach_exit*sqrt(gamma_exit*R_exit*temperature_exit);
 %% Calculate Thrust
 
 thrust_design = massflow_throat*velocity_exit+...
-               (pressure_exit-pressure_design)*area_exit; % Assuming that design has perfect expansion at pressure altitude, otherwise change pressure to match
+    (pressure_exit-pressure_design)*area_exit; % Assuming that design has perfect expansion at pressure altitude, otherwise change pressure to match
 thrust_sea = massflow_throat*velocity_exit+...
-            (pressure_exit-pressure_sea)*area_exit;
+    (pressure_exit-pressure_sea)*area_exit;
 
 %% Performance Parameters
 c_star = pressure_chamber*area_throat/massflow_throat;
@@ -131,16 +132,16 @@ QdotTotal = Qdot02+QdotCH4;
 %% Can 1/4" tubing handle the N2 Volumetric Flow Rate?
 
 mdot_throat = (((0.152^2/4*pi)*600*1)/...
-(sqrt(580*661.98)))*((sqrt(1.4*...
-(1+((1.4-1)/2)*1^2)^...
-(-(1.4+1)/(1.4-1)))));
+    (sqrt(580*661.98)))*((sqrt(1.4*...
+    (1+((1.4-1)/2)*1^2)^...
+    (-(1.4+1)/(1.4-1)))));
 volumetric = mdot_throat/(0.0725*35.3147);
 chillin = volumetric>QdotTotal;
 
 if chillin==1
-  fprintf('We are Chillin\n\n');
+    fprintf('We are Chillin\n\n');
 else
-  fprintf('We are NOT Chillin\n\n');
+    fprintf('We are NOT Chillin\n\n');
 end
 
 %% Injector Sizing
