@@ -124,16 +124,19 @@ close all;
 % legend({'Design Alt.', 'Sea Level', 'Design Alt.', 'Sea Level'}, 'Location','best');
 % hold off
 mtoinch=39.3701;
+ntolbs = 1/4.448;
+kgtolbs = 2.205;
+mtoft = 3.281;
 f = figure(1);
 f.Position = [20 20, 1500 845];
 %% Thrust Plot
 subplot(2,2,1)
 hold on
-title('Sea Level Thrust vs OF Ratio [Various R_t]');
+title('Sea Level Thrust vs OF Ratio [Various R_t (in)]');
 xlabel('OF Ratio')
-ylabel('Thrust in Newtons')
+ylabel('Thrust in LBS')
 for j = 1:1:(length(throatRadiusIterate))
-    plot(OFratioIterate, thrustStoreDesign(:,j));
+    plot(OFratioIterate, thrustStoreDesign(:,j)*ntolbs);
 end
 legend({'0.45', '0.46', '0.47', '0.48', '0.49', '0.50','0.51','0.52','0.53','0.54','0.55'}, ...
     'Location','best', 'NumColumns',2)
@@ -141,10 +144,10 @@ hold off
 %% C* and ISP Plot
 subplot(2,2,2)
 hold on
-title('Characteristic Velocity and ISP')
-plot(OFratioIterate, cStarStore(:,j))
+title('Characteristic Velocity (ft/s) and ISP')
+plot(OFratioIterate, cStarStore(:,j)*mtoft)
 xlabel('OF Ratio')
-ylabel('m/s')
+ylabel('ft/s')
 yyaxis right
 plot(OFratioIterate, ISPStoreSealevel(:, j));
 plot(OFratioIterate, ISPStoreDesign(:, j));
@@ -156,10 +159,10 @@ subplot(2,2,3)
 hold on
 title('Mass Flow Rate vs OF Ratio [Various R_t]');
 for j =1:1:length(throatRadiusIterate)
-    plot(OFratioIterate , massFlowStore(:,j))
+    plot(OFratioIterate , massFlowStore(:,j)*kgtolbs)
 end
 xlabel('OF Ratio')
-ylabel('kg/s')
+ylabel('lb/s')
 legend({'0.45', '0.46', '0.47', '0.48', '0.49', '0.50','0.51','0.52','0.53','0.54','0.55'}, ...
     'Location','best', 'NumColumns', 2)
 hold off
@@ -184,10 +187,10 @@ for j = 1:1:2
     hold on
     titleText = sprintf('Thrust vs OF for (R_t = %0.2f)', throatRadiusIterate(j));
     title(titleText)
-    plot(OFratioIterate, thrustStoreSea(:, j));
-    plot(OFratioIterate, thrustStoreDesign(:,j));
+    plot(OFratioIterate, thrustStoreSea(:, j)*ntolbs);
+    plot(OFratioIterate, thrustStoreDesign(:,j)*ntolbs);
     xlabel('OF Ratio');
-    ylabel('Thrust in Newtons')
+    ylabel('Thrust in lbs')
     yyaxis right
     plot((OFratioIterate), ISPStoreSealevel(:,1));
     plot((OFratioIterate), ISPStoreDesign(:, 1));
@@ -201,10 +204,9 @@ for j = 1:1:2
     hold on
     titleText = sprintf('Mass Flow Rate vs OF Ratio (R_t = %0.2f)', throatRadiusIterate(j));
     title(titleText);
-    plot(OFratioIterate,  massFlowStore(:, j));
+    plot(OFratioIterate,  massFlowStore(:, j)*kgtolbs);
     xlabel('Of Ratio')
-    ylabel('Mass flow in kg/s')
-    ylim([(massFlowStore(1, j) -0.05) (massFlowStore(length(OFratioIterate), j) +0.05)])
+    ylabel('Mass flow in lb/s')
     legend({'Mass Flow'}, 'Location','best');
     hold off
 
@@ -222,9 +224,9 @@ for j = 1:1:2
     hold on
     titleText = sprintf('C* vs OF Ratio(R_t = %0.2f)', throatRadiusIterate(j));
     title(titleText)
-    plot(OFratioIterate, cStarStore(:, j))
+    plot(OFratioIterate, cStarStore(:, j)*mtoft)
     xlabel('Of Ratio')
-    ylabel('C* in m/s')
+    ylabel('C* in ft/s')
     legend({'C*'}, 'Location','best');
     hold off
 
