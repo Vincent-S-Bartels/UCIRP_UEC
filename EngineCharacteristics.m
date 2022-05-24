@@ -42,7 +42,7 @@ for j = 1:1:length(throatRadiusIterate)
     for i = 1:1:length(OFratioIterate)
         n = i;
         %% Table Reading:
-
+        OFratioIterate(n)
         temperature_chamber = T{n,14};  % Kelvin
         pressure_exit = T{n,13}*10^5;   % Pascal
         molarmass_chamber = T{n,8}; % g/mol
@@ -108,21 +108,12 @@ for j = 1:1:length(throatRadiusIterate)
     end
 end
 
+
+
+
+
 %% Plots
 close all;
-% f = figure(1);
-% f.Position =  [300 300 1000 563];
-% hold on
-% plot((OFratioIterate), ISPStoreDesign(:,length(throatRadiusIterate)));
-% plot((OFratioIterate), ISPStoreSealevel(:,length(throatRadiusIterate)));
-% xlabel('OF Ratio');
-% ylabel('ISP at Design Altitude (ft)')
-% title('ISP at Design Altitude vs OF Ratio [Various Throat Radius]')
-% yyaxis right
-% plot((OFratioIterate), thrustStoreDesign(:, length(throatRadiusIterate)));
-% plot((OFratioIterate), thrustStoreSea(:, length(throatRadiusIterate)));
-% legend({'Design Alt.', 'Sea Level', 'Design Alt.', 'Sea Level'}, 'Location','best');
-% hold off
 mtoinch=39.3701;
 ntolbs = 1/4.448;
 kgtolbs = 2.205;
