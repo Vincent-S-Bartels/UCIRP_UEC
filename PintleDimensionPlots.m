@@ -4,7 +4,7 @@ clear; clc; close all;
 %% Engine Constraints:
 OFratio=3.05;%enter O/F wt ratio 2.50:.05:3.50
 n=12;
-radius_throat =0.5;    % inches --later converted to metric
+radius_throat =.65;    % inches --later converted to metric
 mach_throat = 1;    % mach
 pressure_sea = 101325;  % Pascal
 pressure_design=7.950e4;
@@ -39,7 +39,7 @@ preInjectorPressure = (1./(1-pressureDropCoef)).*pressure_chamber; %PSI on prope
 tankPressure = (1./(1-pressureLossCoef)).*preInjectorPressure; %PSI required in tanks using given values and chamber pressure
 
 delPInject = abs((preInjectorPressure - pressure_chamber));
-Cd = 0.8;
+Cd = 0.5;
 
 %% Values from CEA
 mdotTotal=massflow_throat;
@@ -69,24 +69,24 @@ mtoinch=39.3701;
 
 
 %D_pt = (0.25:0.05:0.5)*0.0254;
-D_pt = 0.5*0.0254;
-D_pr=.375*D_pt;
+D_pt = .375*0.0254;
+D_pr=.25*0.0254;
 %theta_pt = 45;
 theta_pt = 30:5:60;
 v_CH4 = zeros(length(delPInject),1);
 v_O2 = zeros(length(delPInject), 1);
-t_ann = zeros(length(delPInject), (length(theta_pt)));
+t_ann = zeros(length(delPInject), 1);
 for j = 1:1:length(theta_pt)
     for i = 1:1:length(delPInject)
-        A_inletO2 = mdotO2/(Cd*sqrt(2*delPInject(i)*rho_O2));
-        A_inletCH4=mdotCH4/(Cd*sqrt(2*delPInject(i)*rho_CH4));
-        v_CH4(i) = mdotCH4/(A_inletCH4*rho_CH4);
-        v_O2(i) = mdotO2/(A_inletO2*rho_O2);
+        A_inletO2(i,j) = mdotO2/(Cd*sqrt(2*delPInject(i)*rho_O2));
+        A_inletCH4(i,j)=mdotCH4/(Cd*sqrt(2*delPInject(i)*rho_CH4));
+        v_CH4(i) = mdotCH4/(A_inletCH4(i,j)*rho_CH4);
+        v_O2(i) = mdotO2/(A_inletO2(i,j)*rho_O2);
 
-        D_cg=2*sqrt((A_inletCH4/pi)+(D_pr/2)^2);
+        D_cg=2*sqrt((A_inletCH4(i,j)/pi)+(D_pr/2)^2);
         t_post=(D_pt-D_cg)/2;      %Thickness of post between D_cg and D_post
         D_post=D_cg+2*t_post;
-        D_outer(i)=2*sqrt((A_inletO2/pi)+(D_post/2)^2);
+        D_outer(i)=2*sqrt((A_inletO2(i,j)./pi)+(D_post/2).^2);
         t_ann(i)=(D_outer(i)-D_post)/2;
         t_cg=(D_cg-D_pr)/2;
 
@@ -95,7 +95,7 @@ for j = 1:1:length(theta_pt)
         R_cg=D_cg/2;
         R_post=D_post/2;
         R_outer=D_outer(i)/2;
-        L_open(i,j) = (R_post-sqrt(R_post^2-A_inletCH4*(sind(theta_pt(j))/pi)))/(sind(theta_pt(j))*cosd(theta_pt(j)))*mtoinch;
+        L_open(i,j) = (R_post-sqrt(R_post^2-A_inletCH4(i,j)*(sind(theta_pt(j))/pi)))/(sind(theta_pt(j))*cosd(theta_pt(j)))*mtoinch;
     end
 end
 %% Plots
@@ -103,7 +103,7 @@ close all;
 subplot(2,2,1)
 hold on
 for j = 1:1:length(theta_pt)
-    plot(delPInject./6894.76, L_open(:,j));
+    plot(pressureDropCoef, L_open(:,j));
 
 end
 xlabel("Pressure drop across injector (PSI)")
@@ -114,16 +114,16 @@ hold off
 
 subplot(2,2,2)
 hold on
-plot(delPInject./6894.76, v_O2*3.28084*12)
-plot(delPInject./6894.76, v_CH4*3.28084*12)
+plot(pressureDropCoef, v_O2)
+plot(pressureDropCoef, v_CH4)
 legend({'O_2', 'CH_4'}, 'Location','best')
 xlabel("Pressure drop across injector (PSI)")
-ylabel('Velocity of Propellants (inches/s)')
+ylabel('Velocity of Propellants (m/s)')
 hold off
 
 subplot(2,2,3)
 hold on
-plot(delPInject./6894.76, t_ann*mtoinch);
+plot(pressureDropCoef, t_ann*mtoinch);
 xlabel("Pressure drop across injector (PSI)")
 ylabel('Annular Distance in Inches')
 hold off
@@ -131,6 +131,6 @@ hold off
 
 subplot(2,2,4)
 hold on
-plot(delPInject./6894.76, D_outer*mtoinch);
+plot(pressureDropCoef, D_outer*mtoinch);
 hold off
 

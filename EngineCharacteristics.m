@@ -22,7 +22,7 @@ end
 
 pressure_design=pressure_chamber/50; %P_TOT/P_exit = 50;
 %% Iterative variables
-throatRadiusIterate =0.45:0.01:0.55; % IN INCHES
+throatRadiusIterate =0.60:0.01:0.7; % IN INCHES
 OFratioIterate = 2.5:0.05:3.5; % OF RATIO
 
 ISPStoreSealevel = zeros(length(OFratioIterate),length(throatRadiusIterate)); % VARIABLE TO STORE ISP
@@ -178,8 +178,8 @@ for j = 1:1:2
     hold on
     titleText = sprintf('Thrust vs OF for (R_t = %0.2f)', throatRadiusIterate(j));
     title(titleText)
-    plot(OFratioIterate, thrustStoreSea(:, j)*ntolbs);
-    plot(OFratioIterate, thrustStoreDesign(:,j)*ntolbs);
+    plot(OFratioIterate, thrustStoreSea(:, 7)*ntolbs);
+    plot(OFratioIterate, thrustStoreDesign(:,7)*ntolbs);
     xlabel('OF Ratio');
     ylabel('Thrust in lbs')
     yyaxis right
@@ -193,9 +193,9 @@ for j = 1:1:2
 
     subplot(2,2,2);
     hold on
-    titleText = sprintf('Mass Flow Rate vs OF Ratio (R_t = %0.2f)', throatRadiusIterate(j));
+    titleText = sprintf('Mass Flow Rate vs OF Ratio (R_t = %0.2f)', throatRadiusIterate(7));
     title(titleText);
-    plot(OFratioIterate,  massFlowStore(:, j)*kgtolbs);
+    plot(OFratioIterate,  massFlowStore(:, 7)*kgtolbs);
     xlabel('Of Ratio')
     ylabel('Mass flow in lb/s')
     legend({'Mass Flow'}, 'Location','best');
@@ -203,9 +203,9 @@ for j = 1:1:2
 
     subplot(2,2,3);
     hold on
-    titleText = sprintf('Exit Radius vs OF Ratio (R_t = %0.2f)', throatRadiusIterate(j));
+    titleText = sprintf('Exit Radius vs OF Ratio (R_t = %0.2f)', throatRadiusIterate(7));
     title(titleText)
-    plot(OFratioIterate, exitRadiusStore(:, j) * mtoinch)
+    plot(OFratioIterate, exitRadiusStore(:, 7) * mtoinch)
     xlabel('Of Ratio')
     ylabel('Exit Radius in INCHES')
     legend({'R_e'}, 'Location','best');
@@ -213,9 +213,9 @@ for j = 1:1:2
 
     subplot(2,2,4);
     hold on
-    titleText = sprintf('C* vs OF Ratio(R_t = %0.2f)', throatRadiusIterate(j));
+    titleText = sprintf('C* vs OF Ratio(R_t = %0.2f)', throatRadiusIterate(7));
     title(titleText)
-    plot(OFratioIterate, cStarStore(:, j)*mtoft)
+    plot(OFratioIterate, cStarStore(:, 7)*mtoft)
     xlabel('Of Ratio')
     ylabel('C* in ft/s')
     legend({'C*'}, 'Location','best');
