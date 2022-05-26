@@ -102,7 +102,7 @@ preInjectorPressure = (1/(1-pressureDropCoef))*pressure_chamber; %PSI on propell
 tankPressure = (1/(1-pressureLossCoef))*preInjectorPressure; %PSI required in tanks using given values and chamber pressure
 
 delPInject = abs((preInjectorPressure - pressure_chamber));
-Cd = 0.8;z
+Cd = 0.5;
 
 %% Values from CEA
 mdotTotal=massflow_throat;
