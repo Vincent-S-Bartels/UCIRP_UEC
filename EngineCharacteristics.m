@@ -22,7 +22,7 @@ end
 
 pressure_design=pressure_chamber/50; %P_TOT/P_exit = 50;
 %% Iterative variables
-throatRadiusIterate =0.60:0.01:0.7; % IN INCHES
+throatRadiusIterate =0.45:0.01:0.55; % IN INCHES
 OFratioIterate = 2.5:0.05:3.5; % OF RATIO
 
 ISPStoreSealevel = zeros(length(OFratioIterate),length(throatRadiusIterate)); % VARIABLE TO STORE ISP
@@ -36,13 +36,20 @@ massFlowStore = ISPStoreSealevel;   % Variable to store mDot
 exitRadiusStore = ISPStoreSealevel;
 
 %% The loop
-for j = 1:1:length(throatRadiusIterate)
-    radius_throat = throatRadiusIterate(j);
-
+for j = 1:1:(length(throatRadiusIterate)+1)
+    if j==length(throatRadiusIterate) + 1
+        radius_throat = 0.5;
+    else
+        radius_throat = throatRadiusIterate(j);
+    end
     for i = 1:1:length(OFratioIterate)
-        n = i;
+        if j==length(throatRadiusIterate) + 1
+            n = 12;
+        else
+            n = i;
+        end
         %% Table Reading:
-        OFratioIterate(n)
+        OFratioIterate(n);
         temperature_chamber = T{n,14};  % Kelvin
         pressure_exit = T{n,13}*10^5;   % Pascal
         molarmass_chamber = T{n,8}; % g/mol
@@ -70,7 +77,6 @@ for j = 1:1:length(throatRadiusIterate)
             (sqrt(temperature_chamber*R_throat)))*((sqrt(gamma_throat*...
             (1+((gamma_throat-1)/2)*mach_throat^2)^...
             (-(gamma_throat+1)/(gamma_throat-1))))); % mass flow rate through an orifice at various mach numbers (choked is mach_throat = 1)
-        massFlowStore(i,j) = massflow_throat;
         %% Calculate Exit Conditions
         mach_exit = sqrt((2/(gamma_exit-1))*((pressure_chamber/pressure_exit)^...
             ((gamma_exit-1)/gamma_exit)-1));
@@ -84,7 +90,7 @@ for j = 1:1:length(throatRadiusIterate)
 
         area_exit = epsilon*area_throat;
         radius_exit = sqrt(area_exit/pi);
-        exitRadiusStore(i,j) = radius_exit;
+
         velocity_exit = mach_exit*sqrt(gamma_exit*R_exit*temperature_exit);
         %epsilon = area_exit/area_throat;
         %% Calculate Thrust
@@ -93,18 +99,28 @@ for j = 1:1:length(throatRadiusIterate)
             (pressure_exit-pressure_design)*area_exit; % Assuming that design has perfect expansion at pressure altitude, otherwise change pressure to match
         thrust_sea = massflow_throat*velocity_exit+...
             (pressure_exit-pressure_sea)*area_exit;
-        thrustStoreSea(i,j) = thrust_sea;
-        thrustStoreDesign(i,j) = thrust_design;
+
         %% Performance Parameters
         c_star = pressure_chamber*area_throat/massflow_throat;
         c_star_verify = sqrt(R_chamber*temperature_chamber*(((gamma_chamber+1)/2)^((gamma_chamber+1)/(gamma_chamber-1)))*(1/gamma_chamber)); %combustion chamber performance parameter
-        cStarStore(i,j) = c_star;
         thrust_coefficient = thrust_design/(pressure_chamber*area_throat);
         thrust_coefficient_verify = sqrt(((2*gamma_exit^2)/(gamma_exit-1))*((2/(gamma_exit+1))^((gamma_exit+1)/(gamma_exit-1)))*(1-((pressure_exit/pressure_chamber)^((gamma_exit-1)/gamma_exit))))+((pressure_exit-pressure_sea)/pressure_chamber)*(area_exit/area_throat); % Assuming that design has perfect expansion at pressure altitude, otherwise change pressure to match
         ISP_SeaLevel = thrust_sea/(massflow_throat*gravity);
         ISP_Design = velocity_exit/gravity;
-        ISPStoreSealevel(i,j) = ISP_SeaLevel;
-        ISPStoreDesign(i,j) = ISP_Design;
+
+        if j==length(throatRadiusIterate) + 1
+        else
+            cStarStore(i,j) = c_star;
+            exitRadiusStore(i,j) = radius_exit;
+            thrustStoreSea(i,j) = thrust_sea;
+            thrustStoreDesign(i,j) = thrust_design;
+            ISPStoreSealevel(i,j) = ISP_SeaLevel;
+            ISPStoreDesign(i,j) = ISP_Design;
+            massFlowStore(i,j) = massflow_throat;
+            velocityExitStore(i,j) = velocity_exit;
+        end
+
+
     end
 end
 
@@ -223,3 +239,54 @@ for j = 1:1:2
 
 end
 
+%% Height Estimation/Burn Time Estimate
+ M_dry = 180; % lbs
+ M_w = 250; %lbs
+
+ M_prop = M_w - M_dry - 10; %% accounting for mass of helium head press
+ R_mass = 1 + M_prop/M_dry;
+ %R_mass = 3;
+ timeBurnPossible = M_prop/2.2./massFlowStore;
+ HmaxPossible = (velocityExitStore).^2.*log(R_mass)^2/(2*gravity)...
+     - velocityExitStore.*timeBurnPossible*(R_mass/(R_mass-1))*log(R-1);
+
+HDesign = 30000* 0.3048;
+timeBurnReq = (velocityExitStore.^2.*log(R_mass)^2/(2*gravity) - HDesign)...
+    ./ (velocityExitStore.*(R_mass/(R_mass - 1))*log(R_mass - 1));
+
+figure(j + 2)
+subplot(2,2,1)
+hold on
+title('Exit Velocity vs OF Ratio [Various R_t (in)]');
+xlabel('OF Ratio')
+ylabel('Exit Velocity in m/s')
+for j = 1:1:(length(throatRadiusIterate))
+    plot(OFratioIterate, velocityExitStore(:,j));
+end
+legend({'0.45', '0.46', '0.47', '0.48', '0.49', '0.50','0.51','0.52','0.53','0.54','0.55'}, ...
+    'Location','best', 'NumColumns',2)
+hold off
+
+subplot(2,2,2)
+hold on
+title('Burn Times Required[Various R_t (in)]');
+xlabel('OF Ratio')
+ylabel('Burn Time in Seconds')
+for j = 1:1:(length(throatRadiusIterate))
+    plot(OFratioIterate, timeBurnReq(:,j)*3.28084);
+end
+legend({'0.45', '0.46', '0.47', '0.48', '0.49', '0.50','0.51','0.52','0.53','0.54','0.55'}, ...
+    'Location','best', 'NumColumns',2)
+hold off
+
+subplot(2,2,3)
+hold on
+title("Burn Times'possible' [Various R_t (in)]");
+xlabel('OF Ratio')
+ylabel('Burn Time in Seconds')
+for j = 1:1:(length(throatRadiusIterate))
+    plot(OFratioIterate, HmaxPossible(:,j));
+end
+legend({'0.45', '0.46', '0.47', '0.48', '0.49', '0.50','0.51','0.52','0.53','0.54','0.55'}, ...
+    'Location','best', 'NumColumns',2)
+hold off
